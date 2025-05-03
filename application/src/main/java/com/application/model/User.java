@@ -1,34 +1,35 @@
 package com.application.model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 
 @Entity
+@Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue
-    private long Id;
-    private  int number;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+
+    private  String number;
 
     public long getId() {
-        return Id;
+        return id;
     }
 
-    public void setId(long id) {
-        Id = id;
-    }
-
-    public User(int number) {
+    public User(String number) {
         this.number = number;
     }
 
-    public int getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(String number) {
         this.number = number;
     }
+
 }
