@@ -5,6 +5,8 @@ import com.application.repository.UserRepository;
 import com.application.smsverification.SmsVerification;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
     private final UserRepository userRepository;
@@ -24,6 +26,9 @@ public class UserService {
             return;
         };
 
+    }
+    public List<User> allUsers() {
+        return userRepository.findAll();
     }
     public void deleteUser(User user) {
         userRepository.deleteById(user.getId());

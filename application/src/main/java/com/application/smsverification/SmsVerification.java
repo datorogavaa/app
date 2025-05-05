@@ -19,7 +19,7 @@ public class SmsVerification {
                     Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
                     Verification verification = Verification.creator(
                                     ServiceSID,
-                                    this.number,
+                                    "+995" + this.number,
                                     "sms").create();
                     Scanner scanner = new Scanner(System.in);
                     System.out.println("Enter the code: ");
@@ -34,7 +34,7 @@ public class SmsVerification {
                     }
             }
             private String verify(String code) {
-                String verify = VerificationCheck.creator(ServiceSID).setTo(this.number).setCode(code).create().getStatus();
+                String verify = VerificationCheck.creator(ServiceSID).setTo("+995"+this.number).setCode(code).create().getStatus();
                 return verify;
             };
 
