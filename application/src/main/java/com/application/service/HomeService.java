@@ -14,22 +14,28 @@ public class HomeService {
     public HomeService(HomeRepository homeRepository) {
         this.homeRepository = homeRepository;
     }
-    public List<Home> allHomes() {
-        return homeRepository.findAll();
-    }
     public void addHome(Home home) {
         homeRepository.save(home);
     }
-    public void deleteHome(Home home) {
-        homeRepository.deleteById(home.getId());
+    public List<Home> allHomes() {
+        return homeRepository.findAll();
     }
     public Optional<Home> getHomeById(Long id) {
         return homeRepository.findById(id);
     }
 
-
-//    public Home editHome(Home home) {
-//        return home;
-//    }
+    public void editHome(Long id, Home newHomeData) {
+        Home home = homeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Home not found"));
+        home.setPostName(newHomeData.getPostName());
+        home.setDescription(newHomeData.getDescription());
+        home.setAddress(newHomeData.getAddress());
+        home.setPrice(newHomeData.getPrice());
+        home.setCode(newHomeData.getCode());
+        homeRepository.save(home);
+    }
+    public void deleteHome(Long id) {
+        homeRepository.deleteById(id);
+    }
 
 }

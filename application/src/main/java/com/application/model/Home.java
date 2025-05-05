@@ -12,11 +12,9 @@ public class Home {
     private long id;
     /// განცხადების სახელი
     @Column(name = "post_name")
-    @JsonProperty("postName")
     private String postName;
     /// მისამართი
     @Column(name = "address")
-    @JsonProperty("address")
     private String address;
     /// სახლის ფასი ერთი დღე
     @Column(name = "price")
@@ -25,12 +23,10 @@ public class Home {
 
     /// სახლის აღწერა
     @Column(name = "description")
-    @JsonProperty("description")
     private String description;
 
     /// სახლის კოდი
     @Column(name = "code")
-    @JsonProperty("code")
     private int code;
 
     public Home() {

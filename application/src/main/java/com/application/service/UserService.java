@@ -3,6 +3,7 @@ package com.application.service;
 import com.application.model.User;
 import com.application.repository.UserRepository;
 import com.application.smsverification.SmsVerification;
+import org.hibernate.annotations.NotFound;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,9 +37,14 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public void deleteUser(User user) {
-        userRepository.deleteById(user.getId());
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
     }
 
-
+    public void editUser(Long id, User newUser) {
+        User user = userRepository.findById(id).orElseThrow(()
+                -> new RuntimeException("User Not found"));
+        user.setNumber(newUser.getNumber());
+        userRepository.save(user);
+    }
 }
