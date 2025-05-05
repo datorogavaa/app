@@ -6,10 +6,11 @@ import com.application.smsverification.SmsVerification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
 
 
     public UserService(UserRepository userRepository) {
@@ -30,6 +31,11 @@ public class UserService {
     public List<User> allUsers() {
         return userRepository.findAll();
     }
+
+    public Optional<User> getUser(Long id) {
+        return userRepository.findById(id);
+    }
+
     public void deleteUser(User user) {
         userRepository.deleteById(user.getId());
     }

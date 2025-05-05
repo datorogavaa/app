@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -23,8 +24,13 @@ public class UserController {
         userService.addUser(user);
         return "User Added sucessfuly";
     }
-    @GetMapping
+    @GetMapping()
     public List<User> getAllUsers() {
         return userService.allUsers();
+    }
+
+    @GetMapping("/{id}")
+    public Optional<User> getUser(@PathVariable Long id) {
+        return userService.getUser(id);
     }
 }

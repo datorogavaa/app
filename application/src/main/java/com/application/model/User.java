@@ -20,6 +20,9 @@ public class User {
         return id;
     }
 
+    public User() {
+
+    }
     public User(String number) {
         this.number = number;
     }

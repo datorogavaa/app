@@ -23,6 +23,11 @@ public class HomeService {
     public void deleteHome(Home home) {
         homeRepository.deleteById(home.getId());
     }
+    public Optional<Home> getHomeById(Long id) {
+        return homeRepository.findById(id);
+    }
+
+
 //    public Home editHome(Home home) {
 //        return home;
 //    }

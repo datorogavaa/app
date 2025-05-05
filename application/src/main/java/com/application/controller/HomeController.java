@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import com.application.model.Home;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -29,6 +30,11 @@ public class HomeController {
     @GetMapping
     public List<Home> allHomes() {
         return homeService.allHomes();
+    }
+
+    @GetMapping("/{id}")
+    public Optional<Home> getHome(@PathVariable Long id) {
+        return homeService.getHomeById(id);
     }
 
 }
