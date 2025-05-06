@@ -1,6 +1,7 @@
 package com.application.model;
 
 
+import com.application.smsverification.SmsVerification;
 import jakarta.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,6 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
 
     private  String number;
 

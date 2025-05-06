@@ -44,7 +44,14 @@ public class UserService {
     public void editUser(Long id, User newUser) {
         User user = userRepository.findById(id).orElseThrow(()
                 -> new RuntimeException("User Not found"));
-        user.setNumber(newUser.getNumber());
-        userRepository.save(user);
+        String number = newUser.getNumber();
+        SmsVerification smsVerification = new SmsVerification(number);
+        if(smsVerification.sendCode()) {
+            user.setNumber(number);
+            userRepository.save(user);
+        }else{
+            System.out.println("Not Added");
+            return;
+        };
     }
 }

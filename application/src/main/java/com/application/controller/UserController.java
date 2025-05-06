@@ -33,4 +33,14 @@ public class UserController {
     public Optional<User> getUser(@PathVariable Long id) {
         return userService.getUser(id);
     }
+    @DeleteMapping("/{id}")
+    public String deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return "User Deleted Successfully";
+    }
+    @PutMapping("/{id}")
+    public String editUser(@PathVariable long id,@RequestBody User newNumber) throws InterruptedException {
+        userService.editUser( id,newNumber);
+        return "Number Changed Successfully";
+    }
 }

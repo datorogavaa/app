@@ -3,6 +3,7 @@ package com.application.service;
 import com.application.model.Home;
 import com.application.repository.HomeRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,5 +38,4 @@ public class HomeService {
     public void deleteHome(Long id) {
         homeRepository.deleteById(id);
     }
-
 }

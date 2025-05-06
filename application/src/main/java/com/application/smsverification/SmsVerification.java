@@ -15,7 +15,7 @@ public class SmsVerification {
             public SmsVerification(String number) {
                 this.number = number;
             }
-            public boolean sendCode() throws InterruptedException {
+            public boolean sendCode() {
                     Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
                     Verification verification = Verification.creator(
                                     ServiceSID,

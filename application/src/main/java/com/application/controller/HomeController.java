@@ -37,4 +37,19 @@ public class HomeController {
         return homeService.getHomeById(id);
     }
 
+
+    @PutMapping("/{id}")
+    public String editHome(@PathVariable Long id, @RequestBody Home home) {
+        homeService.editHome(id,home);
+        return "Home Edited Successfuly";
+    }
+
+
+    @DeleteMapping("/{id}")
+    public String deleteHome(@PathVariable Long id) {
+        homeService.deleteHome(id);
+        return "Home deleted successfully";
+    }
 }
+
+
