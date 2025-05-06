@@ -37,6 +37,10 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    public Optional<User> getUserByNumber(String number) {
+        return userRepository.findByNumber(number);
+    }
+
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
@@ -50,7 +54,7 @@ public class UserService {
             user.setNumber(number);
             userRepository.save(user);
         }else{
-            System.out.println("Not Added");
+            System.out.println("User not Edited");
             return;
         };
     }

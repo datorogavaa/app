@@ -18,7 +18,6 @@ public class Home {
     private String address;
     /// სახლის ფასი ერთი დღე
     @Column(name = "price")
-    @JsonProperty("price")
     private Integer price;
 
     /// სახლის აღწერა
