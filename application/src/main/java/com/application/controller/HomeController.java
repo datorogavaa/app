@@ -28,17 +28,22 @@ public class HomeController {
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<Home> allHomes() {
         return homeService.allHomes();
     }
 
+
+
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public Optional<Home> getHome(@PathVariable Long id) {
         return homeService.getHomeById(id);
     }
 
 
     @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public String editHome(@PathVariable Long id, @RequestBody Home home) {
         homeService.editHome(id,home);
         return "Home Edited Successfuly";
@@ -46,6 +51,7 @@ public class HomeController {
 
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteHome(@PathVariable Long id) {
         homeService.deleteHome(id);
         return "Home deleted successfully";
