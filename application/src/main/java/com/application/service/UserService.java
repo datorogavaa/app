@@ -45,10 +45,9 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public void editUser(Long id, User newUser) {
+    public void editUserNumber(Long id, String number) {
         User user = userRepository.findById(id).orElseThrow(()
                 -> new RuntimeException("User Not found"));
-        String number = newUser.getNumber();
         SmsVerification smsVerification = new SmsVerification(number);
         if(smsVerification.sendCode()) {
             user.setNumber(number);
@@ -57,5 +56,11 @@ public class UserService {
             System.out.println("User not Edited");
             return;
         };
+    }
+    public void changePassword(Long id, String password) {
+        User user = userRepository.findById(id).orElseThrow(()
+                -> new RuntimeException("User Not found"));
+        user.setPassword(password);
+        userRepository.save(user);
     }
 }

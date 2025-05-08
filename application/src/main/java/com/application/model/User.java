@@ -18,6 +18,9 @@ public class User {
     @Column(name = "number")
     private  String number;
 
+    @Column(name = "password")
+    private String password;
+
     public long getId() {
         return id;
     }
@@ -25,8 +28,18 @@ public class User {
     public User() {
 
     }
-    public User(String number) {
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public User(String number, String password) {
         this.number = number;
+        this.password = password;
     }
 
     public String getNumber() {

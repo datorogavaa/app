@@ -43,8 +43,14 @@ public class UserController {
     }
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public String editUser(@PathVariable long id,@RequestBody User newNumber) throws InterruptedException {
-        userService.editUser( id,newNumber);
+    public String editUserNumber(@PathVariable long id,@RequestBody String number) throws InterruptedException {
+        userService.editUserNumber( id,number);
         return "Number Changed Successfully";
+    }
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public String editUserPassword(@PathVariable long id,@RequestBody String password) throws InterruptedException {
+        userService.changePassword( id,password);
+        return "Password Changed Successfully";
     }
 }
