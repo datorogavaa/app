@@ -26,7 +26,6 @@ public class UserController {
         return "User Added sucessfuly";
     }
     @GetMapping()
-    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     public List<User> getAllUsers() {
         return userService.allUsers();
