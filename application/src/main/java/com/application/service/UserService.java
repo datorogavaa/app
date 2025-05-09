@@ -1,9 +1,13 @@
 package com.application.service;
 
 import com.application.model.User;
+import com.application.model.UserRole;
 import com.application.repository.UserRepository;
+import com.application.repository.UserRoleRepository;
 import com.application.smsverification.SmsVerification;
 import org.hibernate.annotations.NotFound;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,11 +15,16 @@ import java.util.Optional;
 
 @Service
 public class UserService {
+
+
     private UserRepository userRepository;
+    private UserRoleRepository userRoleRepository;
 
 
-    public UserService(UserRepository userRepository) {
+
+    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository) {
         this.userRepository = userRepository;
+        this.userRoleRepository = userRoleRepository;
     }
 
     public void addUser(User user) throws InterruptedException {
@@ -23,6 +32,11 @@ public class UserService {
         SmsVerification smsVerification = new SmsVerification(number);
         if(smsVerification.sendCode()) {
             userRepository.save(user);
+            UserRole userRole = new UserRole();
+            userRole.setUser(user);
+            userRole.setRole("ROLE_USER");
+            userRoleRepository.save(userRole);
+
         }else{
             System.out.println("Not Added");
             return;
