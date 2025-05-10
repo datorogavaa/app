@@ -18,15 +18,6 @@ public class Application {
 
 	public static void main(String[] args) throws InterruptedException {
 		ApplicationContext context = SpringApplication.run(Application.class, args);
-//		UserService service = context.getBean(UserService.class);
-//
-//		User user = new User("591721515");
-//		service.addUser(user);
-//		HomeService service = context.getBean(HomeService.class);
-//		Home home = new Home("Post", "Chkhikvadze 12", 123, "Description", 12313);
-//		service.addHome(home);
-//		service.editHome(home);
-
 
 	}
 }

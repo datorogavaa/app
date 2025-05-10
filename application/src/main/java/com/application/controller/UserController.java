@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+
     @Autowired
     private UserService userService;
 
@@ -25,17 +28,30 @@ public class UserController {
         userService.addUser(user);
         return "User Added sucessfuly";
     }
+
+
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public List<User> getAllUsers() {
         return userService.allUsers();
     }
 
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isOwner(#id)")
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Optional<User> getUser(@PathVariable Long id) {
-        return userService.getUser(id);
+    public ResponseEntity<User> getUser(@PathVariable Long id) {
+        Optional<User> userOpt = userService.getUser(id);
+        return userOpt.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+
+    private boolean hasRoleAdmin(Authentication auth) {
+        return auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+    }
+
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteUser(@PathVariable Long id) {
