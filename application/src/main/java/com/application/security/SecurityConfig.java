@@ -28,19 +28,27 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth -> auth
-                        // Allow authenticated users to access GET /users/{id}
-                        .requestMatchers(HttpMethod.GET, "/users/{id}").authenticated()
-                        // Restrict other /users/** endpoints to ADMIN role
-                        .requestMatchers("/users/**").hasRole("ADMIN")
-                        // Restrict /homes/** to ADMIN role
-                        .requestMatchers("/homes/**").hasAnyRole("USER","ADMIN")
+        HttpSecurity httpSecurity = http.authorizeHttpRequests(auth -> auth
 
-                        // All other requests require authentication
+                        .requestMatchers("/error").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users/{id}").authenticated()
+                        .requestMatchers("/users/**").hasRole("ADMIN")
+                        .requestMatchers("/homes/**").hasAnyRole("USER", "ADMIN")
+
+
                         .anyRequest().authenticated()
                 )
+                .exceptionHandling(ex -> ex
+                        // Redirect 403 errors to /error so your controller can handle it
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            request.setAttribute("jakarta.servlet.error.status_code", 403);
+                            request.getRequestDispatcher("/error").forward(request, response);
+                        })
+                )
                 .formLogin(Customizer.withDefaults())
+                .logout(logout -> logout.permitAll())
                 .userDetailsService(userDetailsService);
+
 
         return http.build();
     }
