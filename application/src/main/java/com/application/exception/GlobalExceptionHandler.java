@@ -11,11 +11,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public String handle405() {
-        return "405"; // Thymeleaf template 405.html
+        return "405";
     }
     @ExceptionHandler(HttpClientErrorException.NotFound.class)
     public String handle404() {
-        return "404"; // Thymeleaf template 404.html
+        return "404";
     }
 
 }

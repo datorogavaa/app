@@ -7,6 +7,7 @@ import com.application.repository.UserRoleRepository;
 import com.application.smsverification.SmsVerification;
 import org.hibernate.annotations.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ public class UserService {
     private UserRepository userRepository;
     private UserRoleRepository userRoleRepository;
 
+    private BCryptPasswordEncoder encoder  = new BCryptPasswordEncoder();
 
 
     public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository) {
@@ -31,6 +33,7 @@ public class UserService {
         String number = user.getNumber();
         SmsVerification smsVerification = new SmsVerification(number);
         if(smsVerification.sendCode()) {
+            user.setPassword(encoder.encode(user.getPassword()));
             userRepository.save(user);
             UserRole userRole = new UserRole();
             userRole.setUser(user);

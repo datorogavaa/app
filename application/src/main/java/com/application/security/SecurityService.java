@@ -11,7 +11,10 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service("securityService")
-public class SecurityService {
+public class
+
+
+SecurityService {
 
     @Autowired
     private UserService userService;

@@ -57,7 +57,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance(); // For development only
+        return new BCryptPasswordEncoder();
     }
 
 
