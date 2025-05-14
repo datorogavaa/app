@@ -18,7 +18,7 @@ public class Home {
     private String address;
     /// სახლის ფასი ერთი დღე
     @Column(name = "price")
-    private Integer price;
+    private Double price;
 
     /// სახლის აღწერა
     @Column(name = "description")
@@ -28,11 +28,23 @@ public class Home {
     @Column(name = "code")
     private int code;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id",referencedColumnName = "id",  nullable = true)
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Home() {
 
     }
 
-    public Home(String postName, String address, Integer price, String description,Integer code) {
+    public Home(String postName, String address, Double price, String description,Integer code) {
         this.postName = postName;
         this.address = address;
         this.price = price;
@@ -68,11 +80,11 @@ public class Home {
         this.address = address;
     }
 
-    public Integer getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

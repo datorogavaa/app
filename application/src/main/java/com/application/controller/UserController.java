@@ -22,12 +22,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping()
-    @ResponseStatus(HttpStatus.CREATED)
-    public String addUser(@RequestBody User user) throws InterruptedException {
-        userService.addUser(user);
-        return "User Added sucessfuly";
-    }
+//    @PostMapping()
+//    @ResponseStatus(HttpStatus.CREATED)
+//    public String addUser(@RequestBody User user) throws InterruptedException {
+//        userService.addUser(user);
+//        return "User Added sucessfuly";
+//    }
 
 
     @PreAuthorize("hasRole('ADMIN')")

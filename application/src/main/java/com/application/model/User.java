@@ -28,6 +28,16 @@ public class User {
         return roles;
     }
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<Home> homes = new HashSet<>();
+
+    public Set<Home> getHomes() {
+        return homes;
+    }
+
+    public void setHomes(Set<Home> homes) {
+        this.homes = homes;
+    }
 
     @Column(name = "number")
     private  String number;

@@ -29,7 +29,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         HttpSecurity httpSecurity = http.authorizeHttpRequests(auth -> auth
-
+                        .requestMatchers("/register").permitAll()
                         .requestMatchers("/error").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users/{id}").authenticated()
                         .requestMatchers("/users/**").hasRole("ADMIN")
@@ -38,6 +38,7 @@ public class SecurityConfig {
 
                         .anyRequest().authenticated()
                 )
+                .csrf(csrf -> csrf.disable())
                 .exceptionHandling(ex -> ex
                         // Redirect 403 errors to /error so your controller can handle it
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
