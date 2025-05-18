@@ -20,13 +20,13 @@ public class User {
     private long id;
 
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    @JsonManagedReference
-    private Set<UserRole> roles = new HashSet<>();
-
-    public Set<UserRole> getRoles() {
-        return roles;
-    }
+//    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+//    @JsonManagedReference
+//    private Set<UserRole> roles = new HashSet<>();
+//
+//    public Set<UserRole> getRoles() {
+//        return roles;
+//    }
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private Set<Home> homes = new HashSet<>();

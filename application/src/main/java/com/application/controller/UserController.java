@@ -29,7 +29,7 @@ public class UserController {
 //        return "User Added sucessfuly";
 //    }
 
-
+//
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
@@ -37,7 +37,7 @@ public class UserController {
         return userService.allUsers();
     }
 
-    @PreAuthorize("hasRole('ADMIN') or @securityService.isOwner(#id)")
+//    @PreAuthorize("hasRole('ADMIN') or @securityService.isOwner(#id)")
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable Long id) {
         Optional<User> userOpt = userService.getUser(id);

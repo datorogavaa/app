@@ -1,9 +1,9 @@
 package com.application.service;
 
 import com.application.model.User;
-import com.application.model.UserRole;
+//import com.application.model.UserRole;
 import com.application.repository.UserRepository;
-import com.application.repository.UserRoleRepository;
+//import com.application.repository.UserRoleRepository;
 import com.application.smsverification.SmsVerification;
 import org.hibernate.annotations.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +19,14 @@ public class UserService {
 
 
     private UserRepository userRepository;
-    private UserRoleRepository userRoleRepository;
+//    private UserRoleRepository userRoleRepository;
 
     private BCryptPasswordEncoder encoder  = new BCryptPasswordEncoder();
 
 
-    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.userRoleRepository = userRoleRepository;
+//        this.userRoleRepository = userRoleRepository;
     }
 
     public void addUser(User user) throws InterruptedException {
@@ -35,10 +35,10 @@ public class UserService {
         if(smsVerification.sendCode()) {
             user.setPassword(encoder.encode(user.getPassword()));
             userRepository.save(user);
-            UserRole userRole = new UserRole();
-            userRole.setUser(user);
-            userRole.setRole("ROLE_USER");
-            userRoleRepository.save(userRole);
+//            UserRole userRole = new UserRole();
+//            userRole.setUser(user);
+//            userRole.setRole("ROLE_USER");
+//            userRoleRepository.save(userRole);
 
         }else{
             System.out.println("Not Added");
