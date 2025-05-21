@@ -15,7 +15,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/error").permitAll()
+                        .requestMatchers("/register").permitAll()
                         .requestMatchers("/homes").permitAll()
                         .requestMatchers("/users/**").hasRole("ADMIN")  // Only ADMIN role can access /users/**
                         .anyRequest().authenticated()
