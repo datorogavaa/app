@@ -16,10 +16,10 @@ import java.util.Map;
 @RequestMapping("/register")
 public class AuthController {
 
-    private final String keycloakUrl = "http://<KEYCLOAK_HOST>/auth/realms/app-realm/protocol/openid-connect/token";
-    private final String keycloakAdminUrl = "http://<KEYCLOAK_HOST>/auth/admin/realms/app-realm/users";
-    private final String clientId = "admin-client";
-    private final String clientSecret = "<CLIENT_SECRET>";
+    private final String keycloakUrl = "http://localhost:8080/realms/app-realm/protocol/openid-connect/token";
+    private final String keycloakAdminUrl = "http://localhost:8080/admin/realms/app-realm/users";
+    private final String clientId = "adm_java-backend";
+    private final String clientSecret = "Nr0W8XDWlx7pUUMAi8rbvjHYqiWofE6P";
 
     @Autowired
     private UserService userService;
