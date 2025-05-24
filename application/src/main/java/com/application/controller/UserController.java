@@ -8,8 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,14 +20,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-//    @PostMapping()
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public String addUser(@RequestBody User user) throws InterruptedException {
-//        userService.addUser(user);
-//        return "User Added sucessfuly";
-//    }
-
-//
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
@@ -37,7 +27,7 @@ public class UserController {
         return userService.allUsers();
     }
 
-//    @PreAuthorize("hasRole('ADMIN') or @securityService.isOwner(#id)")
+    @PreAuthorize("hasRole('ADMIN') or @securityService.isOwner(#id)")
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable Long id) {
         Optional<User> userOpt = userService.getUser(id);

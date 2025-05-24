@@ -5,10 +5,7 @@ import com.application.model.User;
 import com.application.repository.UserRepository;
 //import com.application.repository.UserRoleRepository;
 import com.application.smsverification.SmsVerification;
-import org.hibernate.annotations.NotFound;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
