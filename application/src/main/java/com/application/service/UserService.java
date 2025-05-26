@@ -1,9 +1,7 @@
 package com.application.service;
 
 import com.application.model.User;
-//import com.application.model.UserRole;
 import com.application.repository.UserRepository;
-//import com.application.repository.UserRoleRepository;
 import com.application.smsverification.SmsVerification;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,26 +14,20 @@ public class UserService {
 
 
     private UserRepository userRepository;
-//    private UserRoleRepository userRoleRepository;
 
     private BCryptPasswordEncoder encoder  = new BCryptPasswordEncoder();
 
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-//        this.userRoleRepository = userRoleRepository;
     }
 
-    public void addUser(User user) throws InterruptedException {
+    public void addUser(User user) {
         String number = user.getNumber();
         SmsVerification smsVerification = new SmsVerification(number);
         if(smsVerification.sendCode()) {
             user.setPassword(encoder.encode(user.getPassword()));
             userRepository.save(user);
-//            UserRole userRole = new UserRole();
-//            userRole.setUser(user);
-//            userRole.setRole("ROLE_USER");
-//            userRoleRepository.save(userRole);
 
         }else{
             System.out.println("Not Added");

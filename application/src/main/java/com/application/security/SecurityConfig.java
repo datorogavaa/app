@@ -17,8 +17,12 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/register").permitAll()
-                        .requestMatchers("/payment/**").permitAll()
+                        .requestMatchers("/payment/forhome/**").permitAll()
+                        .requestMatchers("/homes/add").authenticated()
+                        .requestMatchers("/homes/{id}/edit").authenticated()
+                        .requestMatchers("/homes/{id}/delete").authenticated()
                         .requestMatchers("/homes").permitAll()
+                        .requestMatchers("/homes/{id}").permitAll()
                         .requestMatchers("/users/**").authenticated()
                         .anyRequest().authenticated()
                 )

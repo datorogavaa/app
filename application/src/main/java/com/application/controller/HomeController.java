@@ -4,6 +4,7 @@ import com.application.service.HomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.application.model.Home;
 
@@ -19,7 +20,9 @@ public class HomeController {
     @Autowired
     private HomeService homeService;
 
-    @PostMapping()
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     public String  createHome(@RequestBody Home home) {
         System.out.println(home);
@@ -42,15 +45,16 @@ public class HomeController {
     }
 
 
-    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{id}/edit")
     @ResponseStatus(HttpStatus.OK)
     public String editHome(@PathVariable Long id, @RequestBody Home home) {
         homeService.editHome(id,home);
         return "Home Edited Successfuly";
     }
 
-
-    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id}/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteHome(@PathVariable Long id) {
         homeService.deleteHome(id);
