@@ -17,6 +17,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/register").permitAll()
+                        .requestMatchers("/payment/**").permitAll()
                         .requestMatchers("/homes").permitAll()
                         .requestMatchers("/users/**").authenticated()
                         .anyRequest().authenticated()
