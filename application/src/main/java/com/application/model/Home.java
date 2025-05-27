@@ -3,6 +3,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.*;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 
 @Entity
 @Table(name = "homes")
@@ -27,6 +31,10 @@ public class Home {
     /// სახლის კოდი
     @Column(name = "code")
     private int code;
+
+    @Column(name = "image_urls", length = 4096)
+    private String imageUrls;
+
 
     @ManyToOne
     @JoinColumn(name = "user_id",referencedColumnName = "id",  nullable = true)
@@ -95,4 +103,18 @@ public class Home {
     public void setCode(int code) {
         this.code = code;
     }
+
+
+    public List<String> getImageUrlList() {
+        if (imageUrls == null || imageUrls.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return Arrays.asList(imageUrls.split(","));
+    }
+
+    public void setImageUrlList(List<String> urls) {
+        this.imageUrls = String.join(",", urls);
+    }
+
+
 }

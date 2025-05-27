@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.application.model.Home;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,13 +21,15 @@ public class HomeController {
     @Autowired
     private HomeService homeService;
 
-
-    @PreAuthorize("hasRole('ADMIN')")
+//
+//    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
-    public String  createHome(@RequestBody Home home) {
-        System.out.println(home);
-        homeService.addHome(home);
+    public String createHome(
+            @RequestPart("home") Home home,
+            @RequestPart(value = "images", required = false) List<MultipartFile> images
+    ) {
+        homeService.addHome(home, images);
         return "Home added successfully";
     }
 

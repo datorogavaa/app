@@ -18,11 +18,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/register").permitAll()
                         .requestMatchers("/payment/forhome/**").permitAll()
-                        .requestMatchers("/homes/add").authenticated()
-                        .requestMatchers("/homes/{id}/edit").authenticated()
-                        .requestMatchers("/homes/{id}/delete").authenticated()
-                        .requestMatchers("/homes").permitAll()
-                        .requestMatchers("/homes/{id}").permitAll()
+//                        .requestMatchers("/homes/add").authenticated()
+//                        .requestMatchers("/homes/{id}/edit").authenticated()
+//                        .requestMatchers("/homes/{id}/delete").authenticated()
+                        .requestMatchers("/homes/**").permitAll()
+                                .requestMatchers("/homes/add").permitAll() // ✅ Allow it explicitly
+//                        .requestMatchers("/homes/{id}").permitAll()
                         .requestMatchers("/users/**").authenticated()
                         .anyRequest().authenticated()
                 )
