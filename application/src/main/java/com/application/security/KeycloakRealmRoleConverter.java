@@ -17,7 +17,7 @@ public class KeycloakRealmRoleConverter implements Converter<Jwt, Collection<Gra
         // ✅ Get client roles from resource_access
         Map<String, Object> resourceAccess = jwt.getClaim("resource_access");
         if (resourceAccess != null) {
-            Map<String, Object> client = (Map<String, Object>) resourceAccess.get("java-backend");  // <-- your client name
+            Map<String, Object> client = (Map<String, Object>) resourceAccess.get("java-backend");
             if (client != null) {
                 List<String> roles = (List<String>) client.get("roles");
                 if (roles != null) {
@@ -28,7 +28,6 @@ public class KeycloakRealmRoleConverter implements Converter<Jwt, Collection<Gra
             }
         }
 
-        // ✅ Optionally include realm roles too
         Map<String, Object> realmAccess = jwt.getClaim("realm_access");
         if (realmAccess != null && realmAccess.get("roles") instanceof Collection<?> realmRoles) {
             authorities.addAll(realmRoles.stream()
