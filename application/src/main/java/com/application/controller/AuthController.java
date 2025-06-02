@@ -31,14 +31,12 @@ public class AuthController {
     public String addUser(@RequestBody User user) throws InterruptedException {
 
 
-        // 1. Get Access Token from Keycloak with client credentials
         String accessToken = getKeycloakAccessToken();
 
         if (accessToken == null) {
             return "Failed to get access token from Keycloak";
         }
 
-        // 2. Create user in Keycloak
         boolean keycloakUserCreated = createKeycloakUser(user, accessToken);
 
         if (!keycloakUserCreated) {
@@ -81,12 +79,10 @@ public class AuthController {
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.setBearerAuth(accessToken);
 
-            // Build user JSON body with username and password only
             Map<String, Object> userJson = new HashMap<>();
             userJson.put("username", user.getNumber());
             userJson.put("enabled", true);
 
-            // Password credentials - must be an array
             Map<String, Object> credential = new HashMap<>();
             credential.put("type", "password");
             credential.put("value", user.getPassword());
