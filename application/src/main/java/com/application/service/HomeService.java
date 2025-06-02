@@ -69,4 +69,17 @@ public class HomeService {
     public void deleteHome(Long id) {
         homeRepository.deleteById(id);
     }
+
+    public void linkHomeToUser(Long homeId, String keycloakUserId) {
+        Optional<Home> homeOpt = homeRepository.findById(homeId);
+        if (homeOpt.isPresent()) {
+            Home home = homeOpt.get();
+            home.setUserId(keycloakUserId);
+            homeRepository.save(home);
+        } else {
+            throw new RuntimeException("Home not found");
+        }
+    }
+
+
 }

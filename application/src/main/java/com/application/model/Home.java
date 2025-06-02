@@ -36,17 +36,17 @@ public class Home {
     private String imageUrls;
 
 
-    @ManyToOne
-    @JoinColumn(name = "user_id",referencedColumnName = "id",  nullable = true)
-    private User user;
+    @Column(name = "user_id", nullable = true)
+    private String userId;
 
-    public User getUser() {
-        return user;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
+
 
     public Home() {
 
