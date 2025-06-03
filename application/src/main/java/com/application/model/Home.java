@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 
 @Entity
@@ -37,13 +38,13 @@ public class Home {
 
 
     @Column(name = "user_id", nullable = true)
-    private String userId;
+    private UUID userId;  // Use UUID for Keycloak user ID
 
-    public String getUserId() {
+    public UUID getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(UUID userId) {
         this.userId = userId;
     }
 

@@ -70,7 +70,7 @@ public class HomeService {
         homeRepository.deleteById(id);
     }
 
-    public void linkHomeToUser(Long homeId, String keycloakUserId) {
+    public void linkHomeToUser(Long homeId, UUID keycloakUserId) {
         Optional<Home> homeOpt = homeRepository.findById(homeId);
         if (homeOpt.isPresent()) {
             Home home = homeOpt.get();

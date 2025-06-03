@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @RestController
@@ -77,24 +78,42 @@ public class HomeController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/rent")
     public ResponseEntity<?> rentHome(@PathVariable Long id, Authentication authentication) {
+        // Check if the user is authenticated
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
         }
 
-        String keycloakUserId = ((Jwt) authentication.getPrincipal()).getClaim("sub");
+        // Declare keycloakUserId outside the try block
+        UUID keycloakUserId = null;
+
+        // Retrieve the 'sub' claim from JWT token (which is the user ID)
+        String keycloakUserIdStr = ((Jwt) authentication.getPrincipal()).getClaim("sub");
 
         try {
+            // Convert the string 'sub' to UUID
+            keycloakUserId = UUID.fromString(keycloakUserIdStr);
+
+            // Now, call the service method to link the home to the user
             homeService.linkHomeToUser(id, keycloakUserId);
+
+        } catch (IllegalArgumentException e) {
+            // If 'sub' is not a valid UUID string
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid user ID format");
         } catch (RuntimeException e) {
+            // If any other error occurs (e.g., Home not found or other runtime errors)
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
+        // Return success response after the try block
         return ResponseEntity.ok(Map.of(
                 "status", "linked",
-                "userId", keycloakUserId,
+                "userId", keycloakUserId.toString(),  // Now 'keycloakUserId' is accessible here
                 "homeId", id
         ));
     }
+
+
+
 
 }
 
