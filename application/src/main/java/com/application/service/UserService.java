@@ -2,7 +2,7 @@ package com.application.service;
 
 import com.application.model.User;
 import com.application.repository.UserRepository;
-import com.application.smsverification.SmsVerification;
+//import com.application.smsverification.SmsVerification;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,16 +23,16 @@ public class UserService {
     }
 
     public void addUser(User user) {
-        String number = user.getNumber();
-        SmsVerification smsVerification = new SmsVerification(number);
-        if(smsVerification.sendCode()) {
+        Integer number = user.getNumber();
+//        SmsVerification smsVerification = new SmsVerification(number);
+//        if(smsVerification.sendCode()) {
             user.setPassword(encoder.encode(user.getPassword()));
             userRepository.save(user);
 
-        }else{
-            System.out.println("Not Added");
-            return;
-        };
+//        }else{
+//            System.out.println("Not Added");
+//            return;
+//        };
 
     }
     public List<User> allUsers() {
@@ -43,7 +43,7 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public Optional<User> getUserByNumber(String number) {
+    public Optional<User> getUserByNumber(Integer number) {
         return userRepository.findByNumber(number);
     }
 
@@ -52,16 +52,16 @@ public class UserService {
     }
 
     public void editUserNumber(Long id, User newUser) {
-        User user = userRepository.findById(id).orElseThrow(()
-                -> new RuntimeException("User Not found"));
-        SmsVerification smsVerification = new SmsVerification(newUser.getNumber());
-        if(smsVerification.sendCode()) {
-            user.setNumber(newUser.getNumber());
-            userRepository.save(user);
-        }else{
-            System.out.println("User not Edited");
-            return;
-        };
+//        User user = userRepository.findById(id).orElseThrow(()
+//                -> new RuntimeException("User Not found"));
+//        SmsVerification smsVerification = new SmsVerification(newUser.getNumber());
+//        if(smsVerification.sendCode()) {
+//            user.setNumber(newUser.getNumber());
+//            userRepository.save(user);
+//        }else{
+//            System.out.println("User not Edited");
+//            return;
+//        };
     }
     public void changePassword(Long id, User newUser) {
         User user = userRepository.findById(id).orElseThrow(()

@@ -1,15 +1,6 @@
 package com.application.model;
 
-
-import com.application.smsverification.SmsVerification;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.HashSet;
-import java.util.Set;
 
 
 @Entity
@@ -19,38 +10,37 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-
-//    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-//    @JsonManagedReference
-//    private Set<UserRole> roles = new HashSet<>();
-//
-//    public Set<UserRole> getRoles() {
-//        return roles;
-//    }
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private Set<Home> homes = new HashSet<>();
-
-    public Set<Home> getHomes() {
-        return homes;
-    }
-
-    public void setHomes(Set<Home> homes) {
-        this.homes = homes;
-    }
-
     @Column(name = "number")
-    private  String number;
+    private  Integer number;
 
     @Column(name = "password")
     private String password;
+
+    @Column(name = "role")
+    private String role = "USER";
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public long getId() {
         return id;
     }
 
-    public User() {
+    public void setId(long id) {
+        this.id = id;
+    }
 
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
     }
 
     public String getPassword() {
@@ -60,18 +50,4 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public User(String number, String password) {
-        this.number = number;
-        this.password = password;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
 }

@@ -35,23 +35,6 @@ public class Home {
     @Column(name = "image_urls", length = 4096)
     private String imageUrls;
 
-
-    @ManyToOne
-    @JoinColumn(name = "user_id",referencedColumnName = "id",  nullable = true)
-    private User user;
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Home() {
-
-    }
-
     public Home(String postName, String address, Double price, String description,Integer code) {
         this.postName = postName;
         this.address = address;

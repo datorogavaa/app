@@ -2,45 +2,50 @@ package com.application.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
 @Configuration
-@EnableMethodSecurity(prePostEnabled = true)  // Enable @PreAuthorize annotations
 public class SecurityConfig {
+
+    private final UserDetailsService userDetailsService;
+
+
+    public SecurityConfig(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/register").permitAll()
-                        .requestMatchers("/payment/forhome/**").permitAll()
-//                        .requestMatchers("/homes/add").authenticated()
-//                        .requestMatchers("/homes/{id}/edit").authenticated()
-//                        .requestMatchers("/homes/{id}/delete").authenticated()
-                        .requestMatchers("/homes/**").permitAll()
-                                .requestMatchers("/homes/add").permitAll() // ✅ Allow it explicitly
-//                        .requestMatchers("/homes/{id}").permitAll()
-                        .requestMatchers("/users/**").authenticated()
+                        .requestMatchers("/css/**",
+                                "/js/**").permitAll()
+                        .requestMatchers("/users/add").permitAll()
+                        .requestMatchers("/homes/**").hasRole("USER")
+                        .requestMatchers("users/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter())
-                        )
-                );
+                .httpBasic(Customizer.withDefaults());
+
 
         return http.build();
     }
 
     @Bean
-    public JwtAuthenticationConverter jwtAuthenticationConverter() {
-        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
-        converter.setJwtGrantedAuthoritiesConverter(new KeycloakRealmRoleConverter());
-        return converter;
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
     }
 }
-

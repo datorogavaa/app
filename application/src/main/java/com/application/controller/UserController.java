@@ -20,14 +20,21 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PreAuthorize("hasRole('ADMIN')")
+
+
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public List<User> getAllUsers() {
         return userService.allUsers();
     }
 
-    @PreAuthorize("hasRole('ADMIN') or @securityService.isOwner(#id)")
+    @PostMapping("/add")
+    @ResponseStatus(HttpStatus.CREATED)
+    public String createUser(@RequestBody User user) {
+        userService.addUser(user);
+        return "User Added Successfully";
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable Long id) {
         Optional<User> userOpt = userService.getUser(id);
@@ -35,19 +42,13 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-
-    private boolean hasRoleAdmin(Authentication auth) {
-        return auth.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-    }
-
-
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return "User Deleted Successfully";
     }
+
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public String updateUser(@PathVariable long id, @RequestBody User newUser) {
