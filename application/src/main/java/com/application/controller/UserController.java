@@ -28,12 +28,6 @@ public class UserController {
         return userService.allUsers();
     }
 
-    @PostMapping("/add")
-    @ResponseStatus(HttpStatus.CREATED)
-    public String createUser(@RequestBody User user) {
-        userService.addUser(user);
-        return "User Added Successfully";
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable Long id) {
