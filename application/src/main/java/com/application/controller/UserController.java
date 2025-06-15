@@ -21,7 +21,7 @@ public class UserController {
     private UserService userService;
 
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public List<User> getAllUsers() {
@@ -37,6 +37,8 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteUser(@PathVariable Long id) {
@@ -44,6 +46,7 @@ public class UserController {
         return "User Deleted Successfully";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public String updateUser(@PathVariable long id, @RequestBody User newUser) {

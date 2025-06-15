@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -32,8 +33,24 @@ public class Home {
     @Column(name = "code")
     private int code;
 
-    @Column(name = "image_urls", length = 4096)
-    private String imageUrls;
+    @ElementCollection
+    @CollectionTable(
+            name = "home_image_urls",
+            joinColumns = @JoinColumn(name = "home_id")
+    )
+    @Column(name = "image_url")
+    private List<String> imageUrls;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(referencedColumnName = "id", name = "user_id", nullable = true)
+    private User user;
+
+
+    @Column
+    private LocalDateTime rentedDate;
+
+    @Column
+    private LocalDateTime rentedUntil;
 
     public Home(String postName, String address, Double price, String description,Integer code) {
         this.postName = postName;
@@ -42,6 +59,9 @@ public class Home {
         this.description = description;
         this.code = code;
     }
+    public Home() {
+    }
+
 
     public String getDescription() {
         return description;
@@ -53,6 +73,10 @@ public class Home {
 
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getPostName() {
@@ -87,17 +111,34 @@ public class Home {
         this.code = code;
     }
 
-
-    public List<String> getImageUrlList() {
-        if (imageUrls == null || imageUrls.isEmpty()) {
-            return Collections.emptyList();
-        }
-        return Arrays.asList(imageUrls.split(","));
+    public List<String> getImageUrls() {
+        return imageUrls;
     }
 
-    public void setImageUrlList(List<String> urls) {
-        this.imageUrls = String.join(",", urls);
+    public void setImageUrls(List<String> imageUrls) {
+        this.imageUrls = imageUrls;
+    }
+    public User getUser() {
+        return user;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
 
+    public LocalDateTime getRentedDate() {
+        return rentedDate;
+    }
+
+    public void setRentedDate(LocalDateTime rentedDate) {
+        this.rentedDate = rentedDate;
+    }
+
+    public LocalDateTime getRentedUntil() {
+        return rentedUntil;
+    }
+
+    public void setRentedUntil(LocalDateTime rentedUntil) {
+        this.rentedUntil = rentedUntil;
+    }
 }

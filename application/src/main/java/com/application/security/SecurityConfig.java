@@ -30,11 +30,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/users/**").authenticated()
-                        .requestMatchers("/homes/**").hasRole("USER")
-                        .anyRequest().authenticated()
+                        .requestMatchers("/homes/**").authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 

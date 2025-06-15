@@ -1,7 +1,9 @@
 package com.application.service;
 
 import com.application.model.Home;
+import com.application.model.User;
 import com.application.repository.HomeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,6 +18,12 @@ public class HomeService {
 
     private final HomeRepository homeRepository;
     private final S3Service s3Service;
+
+
+
+    @Autowired
+    private UserService userService;
+
 
     public HomeService(HomeRepository homeRepository, S3Service s3Service) {
         this.homeRepository = homeRepository;
@@ -41,7 +49,7 @@ public class HomeService {
                 }
             }
 
-            home.setImageUrlList(imageUrls); // this stores the comma-separated string in DB
+            home.setImageUrls(imageUrls); // this stores the comma-separated string in DB
         }
 
         homeRepository.save(home);
@@ -65,8 +73,26 @@ public class HomeService {
         home.setCode(newHomeData.getCode());
         homeRepository.save(home);
     }
-
     public void deleteHome(Long id) {
         homeRepository.deleteById(id);
     }
+
+
+    public String assignUserToHome(Long homeId, Long userId) {
+        Optional<Home> homeOptional = homeRepository.findById(homeId);
+        if (homeOptional.isPresent()) {
+            Home home = homeOptional.get();
+            Optional<User> userOptional = userService.getUser(userId);
+            if (userOptional.isEmpty()) {
+                return "User not found";
+            }else{
+                User user = userOptional.get();
+                home.setUser(user);
+                homeRepository.save(home);
+            }
+            return "User assigned to home successfully";
+        }
+        return "Home not found";
+    }
+
 }

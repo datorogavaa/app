@@ -21,8 +21,8 @@ public class HomeController {
     @Autowired
     private HomeService homeService;
 
-//
-//    @PreAuthorize("hasRole('ADMIN')")
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     public String createHome(
@@ -62,6 +62,17 @@ public class HomeController {
     public String deleteHome(@PathVariable Long id) {
         homeService.deleteHome(id);
         return "Home deleted successfully";
+    }
+
+
+    @PostMapping("/{homeId}/assign-user/{userId}")
+    public ResponseEntity<String> assignUserToHome(@PathVariable Long homeId, @PathVariable Long userId) {
+        String result = homeService.assignUserToHome(homeId, userId);
+        if ("User assigned to home successfully".equals(result)) {
+            return ResponseEntity.ok(result);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        }
     }
 }
 
