@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -88,6 +89,8 @@ public class HomeService {
             }else{
                 User user = userOptional.get();
                 home.setUser(user);
+                home.setRentedDate(LocalDateTime.now());
+                home.setRentedUntil(LocalDateTime.now().plusHours(1)); // Set rentedUntil to 24 hours later
                 homeRepository.save(home);
             }
             return "User assigned to home successfully";
