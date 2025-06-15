@@ -14,10 +14,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfig {
 
-    private final UsersDetailsService usersDetailsService;
+    private final CustomUserDetailsService usersDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    public SecurityConfig(UsersDetailsService usersDetailsService, JwtAuthenticationFilter jwtAuthenticationFilter) {
+    public SecurityConfig(CustomUserDetailsService usersDetailsService, JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.usersDetailsService = usersDetailsService;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/users/**").hasRole("ADMIN")
+                        .requestMatchers("/users/**").authenticated()
                         .requestMatchers("/homes/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )

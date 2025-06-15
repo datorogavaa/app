@@ -2,8 +2,9 @@ package com.application.controller;
 
 import com.application.model.User;
 import com.application.repository.UserRepository;
+import com.application.security.CustomUserDetails;
 import com.application.security.JwtUtil;
-import com.application.security.UsersDetailsService;
+import com.application.security.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,7 +21,7 @@ public class AuthenticationController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private UsersDetailsService usersDetailsService;
+    private CustomUserDetailsService userDetailsService;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -39,7 +40,7 @@ public class AuthenticationController {
         } catch (AuthenticationException e) {
             throw new RuntimeException("Invalid credentials");
         }
-        final UserDetails userDetails = usersDetailsService.loadUserByUsername(request.getNumber().toString());
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getNumber().toString());
         final String jwt = jwtUtil.generateToken(userDetails);
         return new JwtResponse(jwt);
     }

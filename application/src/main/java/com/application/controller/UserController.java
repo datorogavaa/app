@@ -29,6 +29,7 @@ public class UserController {
     }
 
 
+    @PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable Long id) {
         Optional<User> userOpt = userService.getUser(id);

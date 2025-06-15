@@ -2,15 +2,15 @@ package com.application.security;
 
 import com.application.model.User;
 import org.springframework.security.core.GrantedAuthority;
-
+import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
-public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
+public class CustomUserDetails implements UserDetails {
 
     private final User user;
 
-    public UserDetails(User user) {
+    public CustomUserDetails(User user) {
         this.user = user;
     }
 
@@ -19,8 +19,12 @@ public class UserDetails implements org.springframework.security.core.userdetail
         return Collections.singleton(() -> "ROLE_" + user.getRole().toUpperCase());
     }
 
-    public User getAdminUser() {
+    public User getUser() {
         return this.user;
+    }
+
+    public Long getId() {
+        return user.getId();
     }
     @Override
     public String getPassword() {
