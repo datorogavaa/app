@@ -24,6 +24,8 @@ public class HomeSchedulerService {
         List<Home> expiredHomes = homeRepository.findByRentedUntilBeforeAndUserIsNotNull(LocalDateTime.now());
         for (Home home : expiredHomes) {
             home.setUser(null);
+            home.setRentedDate(null);
+            home.setRentedUntil(null);
             homeRepository.save(home);
         }
     }
