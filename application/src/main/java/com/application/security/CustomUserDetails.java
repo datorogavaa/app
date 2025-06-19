@@ -28,7 +28,7 @@ public class CustomUserDetails implements UserDetails {
     }
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return null; // Password is not used in JWT authentication
     }
 
     @Override

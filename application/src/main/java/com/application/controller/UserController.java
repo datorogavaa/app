@@ -46,17 +46,17 @@ public class UserController {
         return "User Deleted Successfully";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public String updateUser(@PathVariable long id, @RequestBody User newUser) {
-        if (newUser.getNumber() != null) {
-            userService.editUserNumber(id, newUser);
-            return "Number Changed Successfully";
-        } else if (newUser.getPassword() != null) {
-            userService.changePassword(id,newUser);
-            return "Password Changed Successfully";
-        }
-        return "Update failed";
-    }
+//    @PreAuthorize("hasRole('ADMIN')")
+//    @PutMapping("/{id}")
+//    @ResponseStatus(HttpStatus.OK)
+//    public String updateUser(@PathVariable long id, @RequestBody User newUser) {
+//        if (newUser.getNumber() != null) {
+//            userService.editUserNumber(id, newUser);
+//            return "Number Changed Successfully";
+//        } else if (newUser.getPassword() != null) {
+//            userService.changePassword(id,newUser);
+//            return "Password Changed Successfully";
+//        }
+//        return "Update failed";
+//    }
 }

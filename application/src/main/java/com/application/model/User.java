@@ -13,9 +13,6 @@ public class User {
     @Column(name = "number")
     private  Integer number;
 
-    @Column(name = "password")
-    private String password;
-
     @Column(name = "role")
     private String role = "USER";
 
@@ -43,11 +40,4 @@ public class User {
         this.number = number;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

@@ -1,78 +1,45 @@
 package com.application.controller;
 
+import com.application.dto.JwtRequestDTO;
+import com.application.dto.OtpVerifyRequestDTO;
+import com.application.dto.JwtResponseDTO;
 import com.application.model.User;
-import com.application.repository.UserRepository;
-import com.application.security.CustomUserDetails;
-import com.application.security.JwtUtil;
 import com.application.security.CustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
+import com.application.security.JwtUtil;
+import com.application.service.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final UserService userService;
+    private final CustomUserDetailsService userDetailsService;
+    private final JwtUtil jwtUtil;
 
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
-
-    @Autowired
-    private JwtUtil jwtUtil;
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @PostMapping("/login")
-    public JwtResponse login(@RequestBody JwtRequest request) {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getNumber(), request.getPassword())
-            );
-        } catch (AuthenticationException e) {
-            throw new RuntimeException("Invalid credentials");
-        }
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getNumber().toString());
-        final String jwt = jwtUtil.generateToken(userDetails);
-        return new JwtResponse(jwt);
+    public AuthenticationController(UserService userService,
+                                    CustomUserDetailsService userDetailsService,
+                                    JwtUtil jwtUtil) {
+        this.userService = userService;
+        this.userDetailsService = userDetailsService;
+        this.jwtUtil = jwtUtil;
     }
 
-
-    @PostMapping("/register")
-    public String register(@RequestBody JwtRequest request) {
-        if (userRepository.findByNumber(request.getNumber()).isPresent()) {
-            return "User already exists";
-        }
-        User user = new User();
-        user.setNumber(request.getNumber());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        userRepository.save(user);
-        return "Registration successful";
+    // ✅ This now works for both registration and login
+    @PostMapping("/send-otp")
+    public String sendOtp(@RequestBody JwtRequestDTO request) {
+        userService.sendOtp(request.getNumber());
+        return "OTP sent";
     }
 
+    @PostMapping("/verify-otp")
+    public JwtResponseDTO verifyOtp(@RequestBody OtpVerifyRequestDTO request) {
+        userService.verifyAndLogin(request.getNumber(), request.getCode());
 
-    public static class JwtRequest {
-        private Integer number;
-        private String password;
-        // getters and setters
-        public Integer getNumber() { return number; }
-        public void setNumber(Integer number) { this.number = number; }
-        public String getPassword() { return password; }
-        public void setPassword(String password) { this.password = password; }
-    }
-
-    public static class JwtResponse {
-        private String token;
-        public JwtResponse(String token) { this.token = token; }
-        public String getToken() { return token; }
-        public void setToken(String token) { this.token = token; }
+        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getNumber().toString());
+        String jwt = jwtUtil.generateToken(userDetails);
+        return new JwtResponseDTO(jwt);
     }
 }
+

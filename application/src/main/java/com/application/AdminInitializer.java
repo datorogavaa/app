@@ -14,10 +14,9 @@ public class AdminInitializer {
         return args -> {
             if (userService.getUserByNumber(591721515).isEmpty()) {
                 User superAdmin = new User();
-                superAdmin.setNumber(591721515);
-                superAdmin.setPassword("superpassword");
+                superAdmin.setNumber(577132378);
                 superAdmin.setRole("ADMIN");
-                userService.addUser(superAdmin);
+                userService.addAdminUser(superAdmin);
             }
         };
     }
