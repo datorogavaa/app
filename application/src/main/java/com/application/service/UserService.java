@@ -44,7 +44,6 @@ public class UserService {
         System.out.println("OTP verified and user is now authenticated.");
     }
 
-    // Admin creation and other methods remain unchanged
     public void addAdminUser(User user) {
         userRepository.save(user);
     }
