@@ -26,7 +26,6 @@ public class AuthenticationController {
         this.jwtUtil = jwtUtil;
     }
 
-    // ✅ This now works for both registration and login
     @PostMapping("/send-otp")
     public String sendOtp(@RequestBody JwtRequestDTO request) {
         userService.sendOtp(request.getNumber());

@@ -46,10 +46,8 @@ public class Home {
     private User user;
 
 
-    @Column
     private LocalDateTime rentedDate;
 
-    @Column
     private LocalDateTime rentedUntil;
 
     public Home(String postName, String address, Double price, String description,Integer code) {
