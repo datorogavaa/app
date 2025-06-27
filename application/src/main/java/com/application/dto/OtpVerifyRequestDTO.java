@@ -1,6 +1,7 @@
 package com.application.dto;
 
 public class OtpVerifyRequestDTO{
+
     private Integer number;
     private String code;
 
