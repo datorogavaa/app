@@ -12,9 +12,9 @@ public class AdminInitializer {
     @Bean
     public CommandLineRunner createSuperAdmin(UserService userService) {
         return args -> {
-            if (userService.getUserByNumber(577132378).isEmpty()) {
+            if (userService.getUserByNumber(591288686).isEmpty()) {
                 User superAdmin = new User();
-                superAdmin.setNumber(577132378);
+                superAdmin.setNumber(591288686);
                 superAdmin.setRole("ADMIN");
                 userService.addAdminUser(superAdmin);
             }

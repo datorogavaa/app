@@ -45,7 +45,7 @@ public class S3Service {
         );
 
         // Use stored region to build correct URL
-        return "https://" + bucketName + ".s3." + region + ".amazonaws.com/" + keyName;
+        return keyName;
     }
 }
 

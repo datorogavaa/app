@@ -1,5 +1,7 @@
 package com.application.service;
 
+import com.application.dto.HomeDTO;
+import com.application.mapper.HomeMapper;
 import com.application.model.Home;
 import com.application.model.User;
 import com.application.repository.HomeRepository;
@@ -18,64 +20,103 @@ import java.util.UUID;
 public class HomeService {
 
     private final HomeRepository homeRepository;
+    private final HomeMapper homeMapper;
     private final S3Service s3Service;
-
+    private final S3Utils s3Utils;
 
 
     @Autowired
     private UserService userService;
 
 
-    public HomeService(HomeRepository homeRepository, S3Service s3Service) {
+    public HomeService(HomeRepository homeRepository, S3Service s3Service, S3Utils s3Utils, HomeMapper homeMapper) {
         this.homeRepository = homeRepository;
         this.s3Service = s3Service;
+        this.s3Utils = s3Utils;
+        this.homeMapper = homeMapper;
     }
 
-    public void addHome(Home home, List<MultipartFile> images) {
+    public HomeDTO addHome(HomeDTO homeDTO, List<MultipartFile> images) {
+        Home home = homeMapper.toEntity(homeDTO);
         if (images != null && !images.isEmpty()) {
-            List<String> imageUrls = new ArrayList<>();
+            List<String> imageKeys = new ArrayList<>();
 
             for (MultipartFile image : images) {
                 try {
-                    String fileName = UUID.randomUUID() + "-" + image.getOriginalFilename();
-                    String url = s3Service.uploadFile(
-                            fileName,
+                    String key = UUID.randomUUID() + "-" + image.getOriginalFilename();
+                    String storedKey = s3Service.uploadFile(
+                            key,
                             image.getInputStream(),
                             image.getSize(),
                             image.getContentType()
                     );
-                    imageUrls.add(url);
+                    imageKeys.add(storedKey);
                 } catch (IOException e) {
                     throw new RuntimeException("Failed to upload image", e);
                 }
             }
 
-            home.setImageUrls(imageUrls); // this stores the comma-separated string in DB
+            home.setImageUrls(imageKeys);
         }
 
         homeRepository.save(home);
+        return homeDTO;
     }
 
-    public List<Home> allHomes() {
-        return homeRepository.findAll();
+    public List<HomeDTO> allHomes() {
+        List<Home> homes = homeRepository.findAll();
+
+        List<HomeDTO> homeDTOs = new ArrayList<>();
+        for (Home home : homes) {
+            HomeDTO homeDTO = homeMapper.toDto(home);
+            if (home.getImageUrls() != null && !home.getImageUrls().isEmpty()) {
+                List<String> signedUrls = home.getImageUrls().stream()
+                        .map(key -> s3Utils.generatePresignedUrl(key, 60))
+                        .toList();
+                homeDTO.setSignedImageUrls(signedUrls);
+            }
+            homeDTOs.add(homeDTO);
+        }
+        return homeDTOs;
     }
 
-    public Optional<Home> getHomeById(Long id) {
-        return homeRepository.findById(id);
+    public HomeDTO getHomeById(Long id) {
+        Home home = homeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Home not found"));
+        HomeDTO homeDTO = homeMapper.toDto(home);
+
+        if (home.getImageUrls() != null && !home.getImageUrls().isEmpty()) {
+            List<String> signedUrls = home.getImageUrls().stream()
+                    .map(key -> s3Utils.generatePresignedUrl(key, 60))
+                    .toList();
+            homeDTO.setSignedImageUrls(signedUrls);
+        }
+
+        return homeDTO;
     }
+
 
     public void editHome(Long id, Home newHomeData) {
         Home home = homeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Home not found"));
-        home.setPostName(newHomeData.getPostName());
         home.setDescription(newHomeData.getDescription());
         home.setAddress(newHomeData.getAddress());
         home.setPrice(newHomeData.getPrice());
         home.setCode(newHomeData.getCode());
+        home.setOwnerName(newHomeData.getOwnerName());
+        home.setOwnerNumber(newHomeData.getOwnerNumber());
+
         homeRepository.save(home);
     }
     public void deleteHome(Long id) {
-        homeRepository.deleteById(id);
+        Optional<Home> homeOptional = homeRepository.findById(id);
+        if (homeOptional.isPresent()) {
+            Home home = homeOptional.get();
+            home.setImageUrls(null);
+            homeRepository.save(home);
+
+            homeRepository.delete(home);
+        }
     }
 
 

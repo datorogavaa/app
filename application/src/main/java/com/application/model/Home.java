@@ -2,6 +2,8 @@ package com.application.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -14,10 +16,7 @@ import java.time.LocalDateTime;
 public class Home {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    /// განცხადების სახელი
-    @Column(name = "post_name")
-    private String postName;
+    private Long id;
     /// მისამართი
     @Column(name = "address")
     private String address;
@@ -33,12 +32,23 @@ public class Home {
     @Column(name = "code")
     private int code;
 
+    ///  owner's name
+    @Column(name = "ownerName")
+    private String ownerName;
+
+    /// owner's phone number
+    @Column(name = "ownerNummber")
+    private Integer ownerNumber;
+
+
+
     @ElementCollection
     @CollectionTable(
             name = "home_image_urls",
             joinColumns = @JoinColumn(name = "home_id")
     )
     @Column(name = "image_url")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<String> imageUrls;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -50,39 +60,46 @@ public class Home {
 
     private LocalDateTime rentedUntil;
 
-    public Home(String postName, String address, Double price, String description,Integer code) {
-        this.postName = postName;
+
+    public Home(Long id, String address, Double price, String description, int code, String ownerName, Integer ownerNumber, List<String> imageUrls) {
+        this.id = id;
         this.address = address;
         this.price = price;
         this.description = description;
         this.code = code;
+        this.ownerName = ownerName;
+        this.ownerNumber = ownerNumber;
+        this.imageUrls = imageUrls;
     }
     public Home() {
     }
 
 
-    public String getDescription() {
-        return description;
+
+
+
+
+    @Transient
+    private List<String> signedImageUrls;
+
+    public List<String> getSignedImageUrls() {
+        return signedImageUrls;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setSignedImageUrls(List<String> signedImageUrls) {
+        this.signedImageUrls = signedImageUrls;
     }
 
-    public long getId() {
+
+
+
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getPostName() {
-        return postName;
-    }
-
-    public void setPostName(String postName) {
-        this.postName = postName;
     }
 
     public String getAddress() {
@@ -101,12 +118,36 @@ public class Home {
         this.price = price;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public int getCode() {
         return code;
     }
 
     public void setCode(int code) {
         this.code = code;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public Integer getOwnerNumber() {
+        return ownerNumber;
+    }
+
+    public void setOwnerNumber(Integer ownerNumber) {
+        this.ownerNumber = ownerNumber;
     }
 
     public List<String> getImageUrls() {
@@ -116,6 +157,7 @@ public class Home {
     public void setImageUrls(List<String> imageUrls) {
         this.imageUrls = imageUrls;
     }
+
     public User getUser() {
         return user;
     }

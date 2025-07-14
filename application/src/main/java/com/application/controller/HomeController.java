@@ -1,5 +1,6 @@
 package com.application.controller;
 
+import com.application.dto.HomeDTO;
 import com.application.service.HomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,16 +27,17 @@ public class HomeController {
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     public String createHome(
-            @RequestPart("home") Home home,
+            @RequestPart("home") HomeDTO homeDTO,
             @RequestPart(value = "images", required = false) List<MultipartFile> images
     ) {
-        homeService.addHome(home, images);
+        homeService.addHome(homeDTO, images);
         return "Home added successfully";
     }
 
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Home> allHomes() {
+    public List<HomeDTO> allHomes() {
         return homeService.allHomes();
     }
 
@@ -43,7 +45,7 @@ public class HomeController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Optional<Home> getHome(@PathVariable Long id) {
+    public HomeDTO getHome(@PathVariable Long id) {
         return homeService.getHomeById(id);
     }
 
