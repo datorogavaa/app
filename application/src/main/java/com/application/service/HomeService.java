@@ -102,7 +102,7 @@ public class HomeService {
         home.setDescription(newHomeData.getDescription());
         home.setAddress(newHomeData.getAddress());
         home.setPrice(newHomeData.getPrice());
-        home.setCode(newHomeData.getCode());
+        home.setDoorCode(newHomeData.getDoorCode());
         home.setOwnerName(newHomeData.getOwnerName());
         home.setOwnerNumber(newHomeData.getOwnerNumber());
 

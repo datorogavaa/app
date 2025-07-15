@@ -29,18 +29,20 @@ public class Home {
     private String description;
 
     /// სახლის კოდი
-    @Column(name = "code")
-    private int code;
+    @Column(name = "doorCode")
+    private Integer doorCode;
 
-    ///  owner's name
+    ///  სახლის მფლობელის სახელი
     @Column(name = "ownerName")
     private String ownerName;
 
-    /// owner's phone number
-    @Column(name = "ownerNummber")
-    private Integer ownerNumber;
+    ///  სახლის მფლობელის ტელეფონის ნომერი
+    @Column(name = "ownerNumber")
+    private String ownerNumber;
 
-
+    /// საძინებლების რაოდენობა
+    @Column(name = "bedrooms")
+    private Integer bedrooms;
 
     @ElementCollection
     @CollectionTable(
@@ -61,14 +63,15 @@ public class Home {
     private LocalDateTime rentedUntil;
 
 
-    public Home(Long id, String address, Double price, String description, int code, String ownerName, Integer ownerNumber, List<String> imageUrls) {
+    public Home(Long id, String address, Double price, String description, Integer doorCode, String ownerName, String ownerNumber, Integer bedrooms ,List<String> imageUrls) {
         this.id = id;
         this.address = address;
         this.price = price;
         this.description = description;
-        this.code = code;
+        this.doorCode = doorCode;
         this.ownerName = ownerName;
         this.ownerNumber = ownerNumber;
+        this.bedrooms = bedrooms;
         this.imageUrls = imageUrls;
     }
     public Home() {
@@ -126,12 +129,12 @@ public class Home {
         this.description = description;
     }
 
-    public int getCode() {
-        return code;
+    public Integer getDoorCode() {
+        return doorCode;
     }
 
-    public void setCode(int code) {
-        this.code = code;
+    public void setDoorCode(Integer doorCode) {
+        this.doorCode = doorCode;
     }
 
     public String getOwnerName() {
@@ -142,12 +145,20 @@ public class Home {
         this.ownerName = ownerName;
     }
 
-    public Integer getOwnerNumber() {
+    public String getOwnerNumber() {
         return ownerNumber;
     }
 
-    public void setOwnerNumber(Integer ownerNumber) {
+    public void setOwnerNumber(String ownerNumber) {
         this.ownerNumber = ownerNumber;
+    }
+
+    public Integer getBedrooms() {
+        return bedrooms;
+    }
+
+    public void setBedrooms(Integer bedrooms) {
+        this.bedrooms = bedrooms;
     }
 
     public List<String> getImageUrls() {
