@@ -40,5 +40,19 @@ public class AuthenticationController {
         String jwt = jwtUtil.generateToken(userDetails);
         return new JwtResponseDTO(jwt);
     }
+
+
+    @PostMapping("/refresh-token")
+    public JwtResponseDTO refreshToken(@RequestBody JwtResponseDTO request) {
+        String refreshToken = request.getToken();
+        if (!jwtUtil.validateRefreshToken(refreshToken)) {
+            throw new RuntimeException("Invalid refresh token");
+        }
+        String username = jwtUtil.extractUsername(refreshToken);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        String newJwt = jwtUtil.generateToken(userDetails);
+        return new JwtResponseDTO(newJwt);
+    }
+
 }
 
