@@ -53,8 +53,12 @@ public class HomeController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/edit")
     @ResponseStatus(HttpStatus.OK)
-    public String editHome(@PathVariable Long id, @RequestBody Home home) {
-        homeService.editHome(id,home);
+    public String editHome(
+            @PathVariable Long id,
+            @RequestPart("home") HomeDTO homeDTO,
+            @RequestPart(value = "images") List<MultipartFile> images
+    ) {
+        homeService.editHome(id, homeDTO, images);
         return "Home Edited Successfuly";
     }
 
