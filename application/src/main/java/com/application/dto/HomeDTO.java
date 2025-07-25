@@ -1,5 +1,6 @@
 package com.application.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import org.springframework.format.annotation.NumberFormat;
 
@@ -42,11 +43,7 @@ public class HomeDTO {
     )
     private String ownerNumber;
 
-
-    private LocalDateTime rentedDate;
-
-    private LocalDateTime rentedUntil;
-
+    @Schema(readOnly = true)
     private List<String> signedImageUrls;
 
 
@@ -107,14 +104,6 @@ public class HomeDTO {
         this.ownerNumber = ownerNumber;
     }
 
-    public LocalDateTime getRentedDate() {
-        return rentedDate;
-    }
-
-    public void setRentedDate(LocalDateTime rentedDate) {
-        this.rentedDate = rentedDate;
-    }
-
     public String getOwnerName() {
         return ownerName;
     }
@@ -123,19 +112,25 @@ public class HomeDTO {
         this.ownerName = ownerName;
     }
 
-    public LocalDateTime getRentedUntil() {
-        return rentedUntil;
-    }
-
-    public void setRentedUntil(LocalDateTime rentedUntil) {
-        this.rentedUntil = rentedUntil;
-    }
-
     public List<String> getSignedImageUrls() {
         return signedImageUrls;
     }
 
     public void setSignedImageUrls(List<String> signedImageUrls) {
         this.signedImageUrls = signedImageUrls;
+    }
+
+    @Override
+    public String toString() {
+        return "Home{" +
+                "id=" + id +
+                ", address='" + address + '\'' +
+                ", price=" + price +
+                ", description='" + description + '\'' +
+                ", doorCode=" + doorCode +
+                ", ownerName='" + ownerName + '\'' +
+                ", ownerNumber='" + ownerNumber + '\'' +
+                ", bedrooms=" + bedrooms +
+                '}';
     }
 }

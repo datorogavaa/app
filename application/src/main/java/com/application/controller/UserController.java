@@ -3,6 +3,8 @@ package com.application.controller;
 import com.application.model.User;
 import com.application.repository.UserRepository;
 import com.application.service.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    Logger logger = LogManager.getLogger(UserController.class);
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping()
@@ -42,6 +45,17 @@ public class UserController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteUser(@PathVariable Long id) {
+        if (id == null) {
+            logger.error("User ID is null");
+            return "User ID cannot be null";
+        }
+
+        Optional<User> userOpt = userService.getUser(id);
+        if (userOpt.isEmpty()) {
+            logger.error("User with ID {} not found", id);
+            return "User not found";
+        }
+        logger.info("Deleting user with ID: {}", id);
         userService.deleteUser(id);
         return "User Deleted Successfully";
     }
@@ -60,3 +74,4 @@ public class UserController {
 //        return "Update failed";
 //    }
 }
+

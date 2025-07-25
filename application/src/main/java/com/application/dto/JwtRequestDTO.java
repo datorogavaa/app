@@ -1,6 +1,14 @@
 package com.application.dto;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+
 public class JwtRequestDTO {
+    @NotNull(message = "Owner phone number is required")
+    @Pattern(
+            regexp = "^(79\\d{7}|5\\d{8})$",
+            message = "Phone number must be a valid Georgian number without +995"
+    )
     private Integer number;
 
 

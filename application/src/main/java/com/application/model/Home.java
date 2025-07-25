@@ -51,7 +51,7 @@ public class Home {
     )
     @Column(name = "image_url")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<String> imageUrls;
+    private List<String> imageKeys;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "id", name = "user_id", nullable = true)
@@ -63,7 +63,7 @@ public class Home {
     private LocalDateTime rentedUntil;
 
 
-    public Home(Long id, String address, Double price, String description, Integer doorCode, String ownerName, String ownerNumber, Integer bedrooms ,List<String> imageUrls) {
+    public Home(Long id, String address, Double price, String description, Integer doorCode, String ownerName, String ownerNumber, Integer bedrooms ,List<String> imageKeys) {
         this.id = id;
         this.address = address;
         this.price = price;
@@ -72,7 +72,7 @@ public class Home {
         this.ownerName = ownerName;
         this.ownerNumber = ownerNumber;
         this.bedrooms = bedrooms;
-        this.imageUrls = imageUrls;
+        this.imageKeys = imageKeys;
     }
     public Home() {
     }
@@ -161,12 +161,12 @@ public class Home {
         this.bedrooms = bedrooms;
     }
 
-    public List<String> getImageUrls() {
-        return imageUrls;
+    public List<String> getImageKeys() {
+        return imageKeys;
     }
 
-    public void setImageUrls(List<String> imageUrls) {
-        this.imageUrls = imageUrls;
+    public void setImageKeys(List<String> imageUrls) {
+        this.imageKeys = imageUrls;
     }
 
     public User getUser() {
@@ -191,5 +191,21 @@ public class Home {
 
     public void setRentedUntil(LocalDateTime rentedUntil) {
         this.rentedUntil = rentedUntil;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Home{" +
+                "id=" + id +
+                ", address='" + address + '\'' +
+                ", price=" + price +
+                ", description='" + description + '\'' +
+                ", doorCode=" + doorCode +
+                ", ownerName='" + ownerName + '\'' +
+                ", ownerNumber='" + ownerNumber + '\'' +
+                ", bedrooms=" + bedrooms +
+                ", imageKeys=" + imageKeys +
+                '}';
     }
 }

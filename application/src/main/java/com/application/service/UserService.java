@@ -2,6 +2,8 @@ package com.application.service;
 
 import com.application.model.User;
 import com.application.repository.UserRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +14,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final SmsVerificationService smsVerificationService;
 
+    Logger logger = LogManager.getLogger(UserService.class);
+
+
     public UserService(UserRepository userRepository, SmsVerificationService smsVerificationService) {
         this.userRepository = userRepository;
         this.smsVerificationService = smsVerificationService;
@@ -21,11 +26,12 @@ public class UserService {
     public void sendOtp(Integer number) {
         String phone = "+995" + number;
         smsVerificationService.sendCode(phone);
-        System.out.println("OTP sent to " + phone);
+        logger.info("OTP sent to phone number: {}", phone);
     }
 
     // ✅ Verify OTP and create user if they don't exist
     public void verifyAndLogin(Integer number, String code) {
+        logger.info("Verifying and sending code to phone number: {}", code);
         String phone = "+995" + number;
         boolean isValid = smsVerificationService.verify(phone, code);
 
@@ -35,17 +41,20 @@ public class UserService {
 
         // Only save if user does not exist
         if (userRepository.findByNumber(number).isEmpty()) {
+            logger.info("User with number {} not found", number);
             User user = new User();
             user.setNumber(number);
             user.setRole("USER");
             userRepository.save(user);
+            logger.info("User with number {} saved", number);
         }
 
-        System.out.println("OTP verified and user is now authenticated.");
+        logger.info("User with number {} verified and logged in", number);
     }
 
     public void addAdminUser(User user) {
         userRepository.save(user);
+        logger.info("Admin user with number {} added", user.getNumber());
     }
 
     public List<User> allUsers() {
@@ -62,7 +71,11 @@ public class UserService {
 
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+        logger.info("User with ID {} deleted", id);
     }
+
+
+
 //    public void editUserNumber(Long id, User newUser) {
 //        User user = userRepository.findById(id).orElseThrow(()
 //                -> new RuntimeException("User Not found"));

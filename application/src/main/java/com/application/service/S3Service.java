@@ -47,5 +47,12 @@ public class S3Service {
         // Use stored region to build correct URL
         return keyName;
     }
+
+    public void deleteFile(String keyName) {
+        s3Client.deleteObject(builder -> builder
+                .bucket(bucketName)
+                .key(keyName)
+        );
+    }
 }
 

@@ -31,6 +31,12 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/users/**").authenticated()
                         .requestMatchers("/homes/**").authenticated()
+                        .requestMatchers(
+                                "/auth/**",                   // Public auth
+                                "/swagger-ui/**",             // ✅ All Swagger UI files
+                                "/v3/api-docs/**",            // ✅ Swagger/OpenAPI JSON docs
+                                "/swagger-ui.html"            // ✅ UI root file
+                        ).permitAll()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
