@@ -37,22 +37,29 @@ public class AuthenticationController {
         userService.verifyAndLogin(request.getNumber(), request.getCode());
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.getNumber().toString());
-        String jwt = jwtUtil.generateToken(userDetails);
-        return new JwtResponseDTO(jwt);
+        String accessToken = jwtUtil.generateAccessToken(userDetails);
+        String refreshToken = jwtUtil.generateRefreshToken(userDetails);
+
+        return new JwtResponseDTO(accessToken, refreshToken);
     }
+
+
 
 
     @PostMapping("/refresh-token")
     public JwtResponseDTO refreshToken(@RequestBody JwtResponseDTO request) {
-        String refreshToken = request.getToken();
+        String refreshToken = request.getRefreshToken();
         if (!jwtUtil.validateRefreshToken(refreshToken)) {
             throw new RuntimeException("Invalid refresh token");
         }
-        String username = jwtUtil.extractUsername(refreshToken);
+        String username = jwtUtil.extractUsernameFromRefreshToken(refreshToken);
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        String newJwt = jwtUtil.generateToken(userDetails);
-        return new JwtResponseDTO(newJwt);
+        String newAccessToken = jwtUtil.generateAccessToken(userDetails);
+        String newRefreshToken = jwtUtil.generateRefreshToken(userDetails);
+
+        return new JwtResponseDTO(newAccessToken, newRefreshToken);
     }
+
 
 }
 
